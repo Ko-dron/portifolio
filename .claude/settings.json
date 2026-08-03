@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(node scripts/generate-og.mjs)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5173/src/main.tsx)",
+      "Bash(curl -s \"http://localhost:5173/src/components/three/HeroScene.tsx\" -o /dev/null -w \"status=%{http_code} size=%{size_download}\\\\n\")",
+      "Bash(curl -s \"http://localhost:5173/src/App.tsx\" -o /dev/null -w \"status=%{http_code} size=%{size_download}\\\\n\")",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Microsoft/Edge/Application/**)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\\\\\(x86\\\\\\)/Google/Chrome/Application/**)"
+    ]
+  }
+}
