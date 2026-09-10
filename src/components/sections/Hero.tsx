@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react'
-import { profile, socials } from '@/data/content'
+import { profile, socials, whatsappUrl } from '@/data/content'
 import { MagneticButton } from '@/components/ui/MagneticButton'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 import { HeroFallback } from '@/components/three/HeroFallback'
 import { useSmoothScroll } from '@/components/layout/ScrollProvider'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -49,14 +50,6 @@ export function Hero() {
       {/* Content overlay */}
       <div className="container-x relative z-10 py-28">
         <motion.div variants={container} initial="hidden" animate="show" className="max-w-4xl">
-          <motion.p
-            variants={item}
-            className="mb-6 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-accent"
-          >
-            <span className="h-px w-8 bg-accent" />
-            {profile.kicker}
-          </motion.p>
-
           <motion.h1
             variants={item}
             className="text-display-lg font-semibold text-heading"
@@ -92,6 +85,7 @@ export function Hero() {
               {[
                 { label: 'GitHub', href: socials.github, icon: Github },
                 { label: 'LinkedIn', href: socials.linkedin, icon: Linkedin },
+                { label: 'WhatsApp', href: whatsappUrl, icon: WhatsAppIcon },
                 { label: 'Email', href: `mailto:${socials.email}`, icon: Mail },
               ].map(({ label, href, icon: Icon }) => (
                 <a

@@ -1,5 +1,6 @@
-import { GraduationCap, MapPin, User } from 'lucide-react'
+import { GraduationCap, MapPin } from 'lucide-react'
 import { profile, sections, topSkills } from '@/data/content'
+import portrait from '@/assets/profile-pic.jpg'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { Tag } from '@/components/ui/Tag'
@@ -9,23 +10,27 @@ export function About() {
 
   return (
     <section id="about" className="container-x scroll-mt-24 py-section">
-      <SectionHeading index={about.index} title={about.title} lead={about.lead} />
+      <SectionHeading title={about.title} lead={about.lead} />
 
       <div className="grid gap-12 md:grid-cols-12 md:gap-16">
-        {/* Portrait placeholder */}
+        {/* Portrait */}
         <div className="md:col-span-4">
           <Reveal>
             <figure className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-border bg-surface">
-              {/*
-                PORTRAIT PLACEHOLDER — replace with a real photo:
-                drop an image into src/assets/ and render an <img> here with
-                descriptive alt text.
-              */}
-              <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-base" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-muted">
-                <User size={40} strokeWidth={1.2} />
-                <span className="text-xs uppercase tracking-[0.2em]">Portrait placeholder</span>
-              </div>
+              <img
+                src={portrait}
+                alt={`Portrait of ${profile.name}`}
+                width={828}
+                height={1280}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 ease-expo group-hover:scale-[1.04]"
+              />
+              {/* Bottom scrim so the caption stays legible over the photo. */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-base/90 to-transparent"
+                aria-hidden="true"
+              />
               <figcaption className="absolute bottom-0 left-0 right-0 border-t border-border bg-base/70 px-4 py-3 text-sm text-body backdrop-blur">
                 {profile.name}
               </figcaption>

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { ArrowUpRight, Github, Linkedin, Mail, Phone } from 'lucide-react'
-import { sections, socials } from '@/data/content'
+import { sections, socials, whatsappUrl } from '@/data/content'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Reveal } from '@/components/ui/Reveal'
 import { MagneticButton } from '@/components/ui/MagneticButton'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 /**
  * Contact section. The form is intentionally backend-free: it composes a
@@ -31,9 +32,15 @@ export function Contact() {
     { label: 'GitHub', value: 'Ko-dron', href: socials.github, icon: Github },
     {
       label: 'LinkedIn',
-      value: 'stanleyansong',
+      value: 'stanley-ansong',
       href: socials.linkedin,
       icon: Linkedin,
+    },
+    {
+      label: 'WhatsApp',
+      value: socials.whatsappDisplay,
+      href: whatsappUrl,
+      icon: WhatsAppIcon,
     },
     ...(socials.phonePublic
       ? [{ label: 'Phone', value: socials.phone, href: `tel:${socials.phone}`, icon: Phone }]
@@ -42,7 +49,7 @@ export function Contact() {
 
   return (
     <section id="contact" className="container-x scroll-mt-24 py-section">
-      <SectionHeading index={contact.index} title={contact.title} lead={contact.lead} />
+      <SectionHeading title={contact.title} lead={contact.lead} />
 
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         {/* Left: pitch + direct links */}
@@ -57,10 +64,14 @@ export function Contact() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <MagneticButton href={`mailto:${socials.email}`}>
                 <Mail size={16} />
                 {socials.email}
+              </MagneticButton>
+              <MagneticButton href={whatsappUrl} variant="ghost">
+                <WhatsAppIcon size={16} />
+                WhatsApp
               </MagneticButton>
             </div>
           </Reveal>

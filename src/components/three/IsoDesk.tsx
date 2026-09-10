@@ -89,6 +89,15 @@ export function IsoDesk({ reduced }: IsoDeskProps) {
 
 /* ── The desk and everything on it ─────────────────────────────────────── */
 
+/**
+ * Layout note: the desk top is 4.6 × 2.3 and its *surface* sits at y = 0.08
+ * (a 0.16-thick slab centred on 0). Every prop below is positioned so it rests
+ * on that surface — not sunk into it — and so no two props overlap in plan
+ * view. Back row: lamp, monitor. Right: laptop (lid hinged, mug well clear of
+ * its sweep). Front row: books, keyboard, mouse, plant.
+ */
+const DESK_Y = 0.08
+
 function DeskAssembly() {
   return (
     <group position={[0, -0.2, 0]}>
@@ -142,9 +151,9 @@ function Desk() {
 function Monitor() {
   // Slight yaw so the glowing screen angles toward the iso camera.
   return (
-    <group position={[-0.3, 0, -0.55]} rotation={[0, 0.28, 0]}>
+    <group position={[-0.55, 0, -0.6]} rotation={[0, 0.28, 0]}>
       {/* Stand base + neck */}
-      <mesh position={[0, 0.14, 0]} castShadow>
+      <mesh position={[0, DESK_Y + 0.02, 0]} castShadow>
         <boxGeometry args={[0.8, 0.04, 0.42]} />
         <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} />
       </mesh>
@@ -204,7 +213,7 @@ function CodeLines() {
 
 function Laptop() {
   return (
-    <group position={[1.45, 0.09, 0.15]} rotation={[0, -0.5, 0]}>
+    <group position={[1.45, DESK_Y + 0.025, 0.16]} rotation={[0, 0.55, 0]}>
       {/* Base */}
       <RoundedBox args={[1.25, 0.05, 0.85]} radius={0.03} smoothness={2} castShadow>
         <meshStandardMaterial color={C.device} roughness={0.4} metalness={0.6} />
@@ -214,8 +223,14 @@ function Laptop() {
         <planeGeometry args={[0.5, 0.32]} />
         <meshStandardMaterial color={C.keycap} roughness={0.6} />
       </mesh>
-      {/* Screen (hinged back) */}
-      <group position={[0, 0, -0.42]} rotation={[-1.15, 0, 0]}>
+      {/*
+        Screen, hinged at the back edge of the base. -0.3 rad ≈ 17° of recline:
+        an open-laptop pose. (It used to be -1.15 rad — around 66° — which laid
+        the lid almost flat across the desk and straight through the mug.) The
+        group's +0.55 yaw matches the monitor's, so the lit panel angles toward
+        the isometric camera instead of turning its back to it.
+      */}
+      <group position={[0, 0, -0.42]} rotation={[-0.3, 0, 0]}>
         <RoundedBox args={[1.25, 0.82, 0.04]} radius={0.03} smoothness={2} position={[0, 0.41, 0]} castShadow>
           <meshStandardMaterial color={C.panelDark} roughness={0.5} metalness={0.4} />
         </RoundedBox>
@@ -230,7 +245,7 @@ function Laptop() {
 
 function Keyboard() {
   return (
-    <group position={[-0.2, 0.1, 0.72]}>
+    <group position={[-0.55, DESK_Y + 0.03, 0.55]}>
       <RoundedBox args={[1.5, 0.06, 0.5]} radius={0.02} smoothness={2} castShadow>
         <meshStandardMaterial color={C.device} roughness={0.6} metalness={0.3} />
       </RoundedBox>
@@ -249,9 +264,11 @@ function Keyboard() {
 }
 
 function Mouse() {
+  // Rotated onto its side so the capsule reads as a mouse lying on the desk
+  // rather than a pill standing upright.
   return (
-    <mesh position={[0.95, 0.11, 0.78]} castShadow>
-      <capsuleGeometry args={[0.08, 0.12, 4, 8]} />
+    <mesh position={[0.55, DESK_Y + 0.075, 0.62]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+      <capsuleGeometry args={[0.075, 0.11, 4, 12]} />
       <meshStandardMaterial color={C.device} roughness={0.5} metalness={0.4} />
     </mesh>
   )
@@ -259,7 +276,7 @@ function Mouse() {
 
 function Mug() {
   return (
-    <group position={[1.75, 0.24, -0.35]}>
+    <group position={[2.0, DESK_Y + 0.16, -0.85]}>
       <mesh castShadow>
         <cylinderGeometry args={[0.15, 0.13, 0.32, 16]} />
         <meshStandardMaterial color={C.white} roughness={0.5} />
@@ -280,26 +297,32 @@ function Mug() {
 
 function Lamp() {
   return (
-    <group position={[-1.95, 0.08, -0.45]}>
+    <group position={[-1.95, DESK_Y + 0.03, -0.35]}>
       {/* Base */}
       <mesh castShadow>
         <cylinderGeometry args={[0.2, 0.22, 0.06, 20]} />
         <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} />
       </mesh>
       {/* Lower arm */}
-      <mesh position={[0.15, 0.5, 0]} rotation={[0, 0, -0.35]} castShadow>
-        <cylinderGeometry args={[0.03, 0.03, 1.0, 8]} />
+      <mesh position={[0.09, 0.52, 0.06]} rotation={[-0.12, 0, -0.2]} castShadow>
+        <cylinderGeometry args={[0.03, 0.03, 1.05, 8]} />
         <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} />
       </mesh>
-      {/* Upper arm */}
-      <mesh position={[0.62, 0.92, 0.1]} rotation={[0.2, 0, 0.9]} castShadow>
-        <cylinderGeometry args={[0.03, 0.03, 0.85, 8]} />
+      {/* Upper arm — reaches forward over the desk, not sideways into the
+          monitor. */}
+      <mesh position={[0.37, 0.98, 0.24]} rotation={[-0.35, 0, 0.75]} castShadow>
+        <cylinderGeometry args={[0.03, 0.03, 0.8, 8]} />
         <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} />
       </mesh>
       {/* Head */}
-      <group position={[0.95, 1.05, 0.15]} rotation={[0.9, 0, 0.5]}>
+      <group position={[0.6, 1.0, 0.36]} rotation={[0.75, 0, 0.45]}>
         <mesh castShadow>
           <coneGeometry args={[0.16, 0.26, 20, 1, true]} />
+          <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} side={THREE.DoubleSide} />
+        </mesh>
+        {/* Cap the cone's open top so the shade doesn't read as a hollow V. */}
+        <mesh position={[0, 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.032, 16]} />
           <meshStandardMaterial color={C.metal} roughness={0.4} metalness={0.7} side={THREE.DoubleSide} />
         </mesh>
         {/* Glowing bulb */}
@@ -309,19 +332,19 @@ function Lamp() {
         </mesh>
       </group>
       {/* Warm pool of light on the desk */}
-      <pointLight position={[0.9, 0.9, 0.3]} intensity={6} distance={4} color="#ff5a5f" />
+      <pointLight position={[0.62, 0.78, 0.44]} intensity={6} distance={4} color="#ff5a5f" />
     </group>
   )
 }
 
 function Books() {
   const stack: Array<[number, number, string]> = [
-    [0.0, 0.09, C.accent],
-    [0.06, 0.19, C.white],
-    [-0.03, 0.29, C.metal],
+    [0.0, 0.045, C.accent],
+    [0.06, 0.145, C.white],
+    [-0.03, 0.245, C.metal],
   ]
   return (
-    <group position={[-1.85, 0.0, 0.55]} rotation={[0, 0.3, 0]}>
+    <group position={[-1.88, DESK_Y, 0.62]} rotation={[0, 0.3, 0]}>
       {stack.map(([dx, y, color], i) => (
         <mesh key={i} position={[dx, y, 0]} castShadow>
           <boxGeometry args={[0.7, 0.09, 0.5]} />
@@ -332,24 +355,34 @@ function Books() {
   )
 }
 
+/**
+ * A small desk plant. It sits in the pocket between the monitor stand and the
+ * laptop — the one spot on the top that nothing else claims — kept deliberately
+ * compact so it reads as desk clutter rather than competing with the screens.
+ */
 function Plant() {
   return (
-    <group position={[2.0, 0.18, 0.55]}>
+    <group position={[0.3, DESK_Y + 0.13, 0.02]}>
       {/* Pot */}
       <mesh castShadow>
-        <cylinderGeometry args={[0.16, 0.12, 0.28, 16]} />
+        <cylinderGeometry args={[0.14, 0.11, 0.26, 16]} />
         <meshStandardMaterial color={C.accent} roughness={0.7} />
       </mesh>
-      {/* Foliage — dark neutral spheres to stay on-palette */}
+      {/* Rim */}
+      <mesh position={[0, 0.13, 0]}>
+        <cylinderGeometry args={[0.15, 0.15, 0.03, 16]} />
+        <meshStandardMaterial color={C.deskEdge} roughness={0.8} />
+      </mesh>
+      {/* Foliage — desaturated greys keep it on-palette against the reds */}
       {[
-        [0, 0.28, 0, 0.17],
-        [0.1, 0.38, 0.05, 0.13],
-        [-0.1, 0.36, -0.04, 0.12],
-        [0.02, 0.46, 0.02, 0.1],
+        [0, 0.26, 0, 0.15],
+        [0.09, 0.36, 0.04, 0.115],
+        [-0.09, 0.34, -0.04, 0.105],
+        [0.02, 0.44, 0.02, 0.09],
       ].map((s, i) => (
         <mesh key={i} position={[s[0], s[1], s[2]]} castShadow>
-          <sphereGeometry args={[s[3], 10, 10]} />
-          <meshStandardMaterial color="#2b2b2b" roughness={0.9} />
+          <sphereGeometry args={[s[3], 12, 12]} />
+          <meshStandardMaterial color="#333331" roughness={0.9} />
         </mesh>
       ))}
     </group>

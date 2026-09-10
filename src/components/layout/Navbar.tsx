@@ -62,7 +62,7 @@ export function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link, i) => {
+          {navLinks.map((link) => {
             const id = link.href.replace('#', '')
             const isActive = active === id
             return (
@@ -75,9 +75,6 @@ export function Navbar() {
                     isActive ? 'text-heading' : 'text-body hover:text-heading',
                   )}
                 >
-                  <span className="font-mono text-[0.65rem] text-muted">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
                   <span className="link-underline">{link.label}</span>
                 </a>
               </li>
@@ -120,9 +117,6 @@ export function Navbar() {
                     onClick={(e) => handleNav(e, link.href)}
                     className="flex items-baseline gap-4 border-b border-border py-4 text-2xl font-display text-heading"
                   >
-                    <span className="font-mono text-xs text-accent">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
                     {link.label}
                   </a>
                 </motion.li>

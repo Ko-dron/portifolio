@@ -112,7 +112,7 @@ npm run preview
 **All editable content lives in [`src/data/content.ts`](src/data/content.ts)** — you can update the entire site there without touching a single component.
 
 - **Profile** — name, tagline, hero headline, bio, location, education → the `profile` object.
-- **Socials / contact** — email, LinkedIn, GitHub, phone → the `socials` object. Set `phonePublic: true` to show the phone number on the site.
+- **Socials / contact** — email, LinkedIn, GitHub, WhatsApp, phone → the `socials` object. Set `phonePublic: true` to show the plain phone number on the site. WhatsApp is always shown: `whatsapp` is the E.164 number used to build the `wa.me` link (exported as `whatsappUrl`, with a prefilled opening message), and `whatsappDisplay` is the human-readable form rendered in the Contact list.
 - **Skills** — grouped skills and icons → `skillGroups`; the three highlighted strengths → `topSkills`.
 - **Projects** — each card's title, repo, description, tags, category, icon → the `projects` array. Repo URLs are auto-built as `https://github.com/Ko-dron/<repo>`. To add a real preview screenshot, drop an image in `src/assets/` and set `image` on that project.
 - **Certifications** — → the `certifications` array.
@@ -120,9 +120,9 @@ npm run preview
 
 **Colors & fonts:** edit the theme tokens in [`tailwind.config.ts`](tailwind.config.ts) — the `colors` block (change `accent.DEFAULT` to re-tint the whole site) and `fontFamily`. The theme is built around **`#df2531`** (accent red), **`#161616`** (base), and **`#faf9f7`** (heading); translucent accent variants are done with opacity utilities (`bg-accent/45`, `bg-accent/65`). The 3D scene has its own matching palette constant `C` at the top of [`IsoDesk.tsx`](src/components/three/IsoDesk.tsx). Fonts load via Google Fonts in [`index.html`](index.html); atmosphere (grain, radial gradients, cursor) lives in [`src/styles/globals.css`](src/styles/globals.css). The OG placeholder colours are in [`scripts/generate-og.mjs`](scripts/generate-og.mjs) — rerun `node scripts/generate-og.mjs` after changing them.
 
-**Swapping / editing the 3D hero:** the isometric desk is composed in [`src/components/three/IsoDesk.tsx`](src/components/three/IsoDesk.tsx) — each object (`Monitor`, `Laptop`, `Keyboard`, `Lamp`, `Chair`, …) is its own small function you can tweak, move, or remove. The orthographic isometric camera and its responsive zoom live in [`HeroScene.tsx`](src/components/three/HeroScene.tsx). Lighting is in `Lighting.tsx`, particles in `Particles.tsx`, and post effects (bloom/vignette) in `Effects.tsx`.
+**Swapping / editing the 3D hero:** the isometric desk is composed in [`src/components/three/IsoDesk.tsx`](src/components/three/IsoDesk.tsx) — each object (`Monitor`, `Laptop`, `Keyboard`, `Lamp`, `Chair`, …) is its own small function you can tweak, move, or remove. When moving props, keep the layout note above `DeskAssembly` in mind: the desk surface is at `y = DESK_Y` and the props are positioned not to overlap each other in plan view. The orthographic isometric camera and its responsive zoom live in [`HeroScene.tsx`](src/components/three/HeroScene.tsx). Lighting is in `Lighting.tsx`, particles in `Particles.tsx`, and post effects (bloom/vignette) in `Effects.tsx`.
 
-**Portrait & OG image:** the About portrait is a marked placeholder in `About.tsx` — replace the placeholder block with an `<img>`. The social card `public/og-image.png` is a generated placeholder; regenerate with `node scripts/generate-og.mjs` or drop in your own 1200×630 image.
+**Portrait & OG image:** the About portrait is `src/assets/profile-pic.jpg`, imported and rendered by `About.tsx` — to change it, replace that file (or point the import at a new one) and update the `width`/`height` attributes to the new image's intrinsic size. The social card `public/og-image.png` is a generated placeholder; regenerate with `node scripts/generate-og.mjs` or drop in your own 1200×630 image.
 
 ---
 

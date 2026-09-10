@@ -7,7 +7,7 @@ export function Skills() {
 
   return (
     <section id="skills" className="container-x scroll-mt-24 py-section">
-      <SectionHeading index={skills.index} title={skills.title} lead={skills.lead} />
+      <SectionHeading title={skills.title} lead={skills.lead} />
 
       <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" stagger={0.06}>
         {skillGroups.map((group) => {

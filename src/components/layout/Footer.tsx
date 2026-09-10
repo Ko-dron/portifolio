@@ -1,5 +1,6 @@
 import { Github, Linkedin, Mail, ArrowUp } from 'lucide-react'
-import { profile, socials, meta } from '@/data/content'
+import { profile, socials, meta, whatsappUrl } from '@/data/content'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 import { useSmoothScroll } from './ScrollProvider'
 
 export function Footer() {
@@ -9,6 +10,7 @@ export function Footer() {
     { label: 'Email', href: `mailto:${socials.email}`, icon: Mail },
     { label: 'GitHub', href: socials.github, icon: Github },
     { label: 'LinkedIn', href: socials.linkedin, icon: Linkedin },
+    { label: 'WhatsApp', href: whatsappUrl, icon: WhatsAppIcon },
   ]
 
   return (

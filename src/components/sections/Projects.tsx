@@ -74,8 +74,7 @@ function ProjectsHorizontal() {
       >
         {/* Intro panel travels with the track */}
         <div className="flex h-full w-[86vw] shrink-0 flex-col justify-center pr-10 sm:w-[46vw] lg:w-[34vw]">
-          <span className="section-index">{copy.index}</span>
-          <h2 className="mt-4 text-display-md font-semibold text-heading">{copy.title}</h2>
+          <h2 className="text-display-md font-semibold text-heading">{copy.title}</h2>
           <p className="mt-5 max-w-sm text-body">{copy.lead}</p>
           <p className="mt-8 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent">
             Scroll <ArrowRight size={14} />
@@ -99,7 +98,7 @@ function ProjectsStacked() {
   const { projects: copy } = sections
   return (
     <div className="container-x py-section">
-      <SectionHeading index={copy.index} title={copy.title} lead={copy.lead} />
+      <SectionHeading title={copy.title} lead={copy.lead} />
       <RevealGroup className="grid gap-6 sm:grid-cols-2" stagger={0.08}>
         {projects.map((project) => (
           <RevealItem key={project.repo}>

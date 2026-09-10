@@ -32,8 +32,6 @@ export const profile = {
   tagline: 'Full-Stack Developer · Cybersecurity & AI · IT Student @ KNUST',
   // Hero headline — the one big statement.
   headline: 'Building practical, real-world tech — across the full stack, security, and AI.',
-  // Short kicker shown above the headline.
-  kicker: 'Full-Stack · Cybersecurity · AI',
   bio: "I'm an Information Technology student with a strong interest in building practical, real-world tech solutions. My academic journey and personal projects have built hands-on skills across web development, networking, cloud computing, cybersecurity, AI engineering, and graphic design.",
   location: 'Ghana · Accra / Kumasi',
   education: {
@@ -48,12 +46,21 @@ export const profile = {
 
 export const socials = {
   email: 'ansongsrx@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/stanleyansong-32a9a3398',
+  linkedin: 'https://www.linkedin.com/in/stanley-ansong-32a9a3398/',
   github: 'https://github.com/Ko-dron',
+  // WhatsApp — `whatsapp` is the E.164 number used to build the wa.me link,
+  // `whatsappDisplay` is the human-readable form shown in the UI.
+  whatsapp: '233257457533',
+  whatsappDisplay: '+233 25 745 7533',
   // Set `phonePublic` to true only if Stanley wants the number shown on the site.
   phone: '+233 25 745 7533',
   phonePublic: false,
 } as const
+
+/** Pre-built `wa.me` deep link with a friendly opening message. */
+export const whatsappUrl = `https://wa.me/${socials.whatsapp}?text=${encodeURIComponent(
+  "Hi Stanley — I found your portfolio and I'd like to get in touch.",
+)}`
 
 /* ── Navigation ────────────────────────────────────────────────────────── */
 
@@ -214,27 +221,22 @@ export const certifications: Certification[] = [
 
 export const sections = {
   about: {
-    index: '01',
     title: 'About',
     lead: 'An all-rounder who builds — and secures — what he ships.',
   },
   skills: {
-    index: '02',
     title: 'Expertise',
     lead: 'Depth across three fronts: full-stack, security, and AI.',
   },
   projects: {
-    index: '03',
     title: 'Projects',
     lead: 'Selected work, from storefronts to packet sniffers.',
   },
   certifications: {
-    index: '04',
     title: 'Certifications',
     lead: 'Credentials backing the security and AI foundations.',
   },
   contact: {
-    index: '05',
     title: 'Contact',
     lead: "Have something to build, break, or secure? Let's talk.",
     closing: "I'm open to internships, collaborations, and interesting problems.",
