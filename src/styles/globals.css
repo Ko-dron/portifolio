@@ -126,33 +126,82 @@
 /* ------------------------------------------------------------------ */
 /* Custom cursor                                                       */
 /* ------------------------------------------------------------------ */
-.cursor-dot,
-.cursor-ring {
+/* Origami paper-plane cursor. The wrapper sits exactly on the pointer and is
+   rotated by GSAP around its own origin; the plane is offset so its nose
+   (30,12 in the SVG) lands on that origin — the nose is the hotspot. */
+.cursor-plane {
   position: fixed;
   top: 0;
   left: 0;
+  width: 0;
+  height: 0;
   pointer-events: none;
   z-index: 70;
-  border-radius: 9999px;
-  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  will-change: transform;
 }
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: #faf9f7;
-  transform: translate(-50%, -50%);
+.cursor-plane--visible {
+  opacity: 1;
 }
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(250, 249, 247, 0.7);
-  transform: translate(-50%, -50%);
-  transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+.cursor-plane__body {
+  position: absolute;
+  left: -30px;
+  top: -12px;
+  width: 30px;
+  height: 24px;
+  transform-origin: 30px 12px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
 }
-.cursor-ring--hover {
-  width: 56px;
-  height: 56px;
-  border-color: theme('colors.accent.soft');
+.cursor-plane--hover {
+  transform: scale(1.35);
+}
+.cursor-plane--down {
+  transform: scale(0.8) rotate(-8deg);
+}
+.cursor-plane__svg {
+  display: block;
+  overflow: visible;
+  transform-origin: 30px 12px;
+}
+.cursor-plane__svg--float {
+  animation: plane-float 2.6s ease-in-out infinite;
+}
+.cursor-plane__wing {
+  fill: #faf9f7;
+  transition: fill 0.25s ease;
+}
+.cursor-plane__keel {
+  fill: #c9c5be;
+  transition: fill 0.25s ease;
+}
+.cursor-plane__tip {
+  fill: #8f8b85;
+  transition: fill 0.25s ease;
+}
+.cursor-plane__crease {
+  stroke: rgba(22, 22, 22, 0.35);
+  stroke-width: 0.8;
+  fill: none;
+}
+.cursor-plane--hover .cursor-plane__wing {
+  fill: theme('colors.accent.soft');
+}
+.cursor-plane--hover .cursor-plane__keel {
+  fill: theme('colors.accent.DEFAULT');
+}
+.cursor-plane--hover .cursor-plane__tip {
+  fill: theme('colors.accent.dim');
+}
+@keyframes plane-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-4deg);
+  }
 }
 
 /* ------------------------------------------------------------------ */

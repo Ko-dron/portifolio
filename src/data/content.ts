@@ -26,6 +26,7 @@ import {
   Car,
   Wrench,
   Swords,
+  Plane,
 } from 'lucide-react'
 
 import evexiaShot from '@/assets/projects/evexia.jpg'
@@ -215,6 +216,16 @@ export const featuredProjects: Project[] = [
     repoUrl: repoUrl('CodeAlpha_PhishingAwareness'),
   },
   {
+    // TODO: add the live / GitHub links, real stack and a screenshot when available.
+    title: 'GlobalPath',
+    category: 'AI · Claude Hackathon 2026',
+    icon: Plane,
+    summary:
+      'An AI-powered platform that guides international students and immigrants through every stage of studying or working abroad. It tackles fragmented information, scams and post-admission challenges with trusted support for applications, housing, banking, careers and community integration.',
+    stack: ['Claude', 'AI guidance'],
+    role: 'Team project — Claude Hackathon, 30 May 2026',
+  },
+  {
     // TODO: add summary, stack, role, links and a screenshot, then remove `draft`.
     title: 'CyberForge',
     category: 'Security',
@@ -297,6 +308,16 @@ export const experience: ExperienceItem[] = [
     kind: 'Hackathon',
     points: ['Built Evexia, an astronaut crew-health console, with a team over the challenge weekend.'],
   },
+  {
+    role: 'Team Project — GlobalPath',
+    org: 'Claude Hackathon',
+    period: '30 May 2026',
+    kind: 'Hackathon',
+    points: [
+      'Collaborated with a team to build GlobalPath, an AI-powered platform that guides international students and immigrants through every stage of studying or working abroad.',
+      'Addressed fragmented information, scams and post-admission challenges with trusted support for applications, housing, banking, careers and community integration.',
+    ],
+  },
   // TODO: add volunteering — e.g.
   // { role: 'Volunteer', org: '…', period: '…', kind: 'Volunteering', points: ['…'] },
 ]
@@ -372,6 +393,6 @@ export const sections = {
 } as const
 
 export const meta = {
-  builtWith: 'Built with React + Three.js',
+  builtWith: 'Kodron Builds',
   year: new Date().getFullYear(),
 } as const
