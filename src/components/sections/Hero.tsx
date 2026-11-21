@@ -56,7 +56,7 @@ export function Hero() {
 
       {/* Content overlay */}
       <div className="container-x relative z-10 py-28">
-        <motion.div variants={container} initial="hidden" animate="show" className="max-w-4xl">
+        <motion.div variants={container} initial="hidden" animate="show" className="max-w-3xl">
           <motion.p
             variants={item}
             className="mb-6 font-mono text-xs uppercase tracking-[0.25em] text-accent"
@@ -66,7 +66,7 @@ export function Hero() {
 
           <motion.h1
             variants={item}
-            className="text-display-lg font-semibold text-heading"
+            className="max-w-[15ch] text-display-lg font-semibold text-heading"
           >
             {profile.headline}
           </motion.h1>

@@ -24,6 +24,11 @@ function detectLowPower(): boolean {
  * Keeps the orthographic camera aimed at the desk and rescales its zoom with the
  * viewport, so the isometric scene stays a sensible size on any screen.
  */
+/** Pixels per world unit for a given viewport. */
+function isoZoom(width: number, height: number) {
+  return clamp(Math.min(width, height * 1.5) / 11, 30, 105)
+}
+
 function IsoCameraRig() {
   const { camera, size } = useThree()
 
@@ -34,11 +39,26 @@ function IsoCameraRig() {
   useEffect(() => {
     const ortho = camera as THREE.OrthographicCamera
     // Zoom = pixels-per-world-unit; scale to the smaller viewport dimension.
-    ortho.zoom = clamp(Math.min(size.width, size.height * 1.5) / 9.5, 30, 118)
+    ortho.zoom = isoZoom(size.width, size.height)
     ortho.updateProjectionMatrix()
   }, [camera, size])
 
   return null
+}
+
+/**
+ * Places the desk in the right-hand part of the viewport so it never sits
+ * under the headline. The camera looks from (+x, +z), so screen-right is the
+ * world direction (1, 0, -1)/√2: we convert the wanted pixel offset into world
+ * units and move the group along that axis.
+ */
+function DeskAnchor({ children }: { children: React.ReactNode }) {
+  const { size } = useThree()
+  const zoom = isoZoom(size.width, size.height)
+  // Centre the desk at ~74-75% of the viewport width.
+  const frac = size.width >= 1280 ? 0.24 : 0.25
+  const k = (size.width * frac) / zoom / Math.SQRT2
+  return <group position={[0.4 + k, -0.35, 0.4 - k]}>{children}</group>
 }
 
 /**
@@ -98,9 +118,9 @@ export default function HeroScene() {
           <Lighting />
           {/* Offset the desk toward the right so it clears the left-aligned
               headline; on narrow screens it recenters. */}
-          <group position={[1.7, -0.35, 0.6]}>
+          <DeskAnchor>
             <IsoDesk reduced={reduced} />
-          </group>
+          </DeskAnchor>
           <Particles reduced={reduced} count={lowPower ? 120 : 220} />
           {!lowPower && <Effects />}
         </Suspense>

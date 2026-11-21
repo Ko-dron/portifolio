@@ -7,11 +7,13 @@ import { useSmoothScroll } from './ScrollProvider'
 import { cn } from '@/lib/utils'
 
 const sectionIds = navLinks.map((l) => l.href.replace('#', ''))
+// Also watch the hero so nothing is highlighted while you're at the top.
+const observedIds = ['hero', ...sectionIds]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const active = useActiveSection(sectionIds)
+  const active = useActiveSection(observedIds)
   const { scrollTo } = useSmoothScroll()
 
   useEffect(() => {

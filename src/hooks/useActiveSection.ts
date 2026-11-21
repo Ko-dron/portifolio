@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
  * navbar link. Uses IntersectionObserver against the given section ids.
  */
 export function useActiveSection(ids: string[]): string {
-  const [active, setActive] = useState<string>(ids[0] ?? '')
+  const [active, setActive] = useState<string>('')
 
   useEffect(() => {
     const observer = new IntersectionObserver(
