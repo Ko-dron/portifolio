@@ -126,81 +126,96 @@
 /* ------------------------------------------------------------------ */
 /* Custom cursor                                                       */
 /* ------------------------------------------------------------------ */
-/* Origami paper-plane cursor. The wrapper sits exactly on the pointer and is
-   rotated by GSAP around its own origin; the plane is offset so its nose
-   (30,12 in the SVG) lands on that origin — the nose is the hotspot. */
-.cursor-plane {
+/* HUD target-lock cursor: a 1:1 dot plus four corner brackets that trail the
+   pointer and snap around interactive elements. Sized/positioned by GSAP. */
+.cursor-dot,
+.cursor-reticle {
   position: fixed;
   top: 0;
   left: 0;
-  width: 0;
-  height: 0;
   pointer-events: none;
   z-index: 70;
   opacity: 0;
   transition: opacity 0.2s ease;
-  will-change: transform;
 }
-.cursor-plane--visible {
+.cursor--visible {
   opacity: 1;
 }
-.cursor-plane__body {
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #faf9f7;
+  box-shadow: 0 0 8px rgba(250, 249, 247, 0.6);
+  transition: opacity 0.2s ease, background-color 0.25s ease, box-shadow 0.25s ease,
+    width 0.25s ease, height 0.25s ease;
+}
+.cursor-dot--locked {
+  width: 3px;
+  height: 3px;
+  background: theme('colors.accent.soft');
+  box-shadow: 0 0 10px theme('colors.accent.DEFAULT');
+}
+.cursor-reticle__frame {
   position: absolute;
-  left: -30px;
-  top: -12px;
-  width: 30px;
-  height: 24px;
-  transform-origin: 30px 12px;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+  inset: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cursor-plane--hover {
-  transform: scale(1.35);
+.cursor-reticle__frame--pulse {
+  animation: reticle-breathe 2.4s ease-in-out infinite;
 }
-.cursor-plane--down {
-  transform: scale(0.8) rotate(-8deg);
+.cursor-reticle--locked .cursor-reticle__frame {
+  animation: none;
 }
-.cursor-plane__svg {
-  display: block;
-  overflow: visible;
-  transform-origin: 30px 12px;
+.cursor-reticle--down .cursor-reticle__frame {
+  transform: scale(0.82);
 }
-.cursor-plane__svg--float {
-  animation: plane-float 2.6s ease-in-out infinite;
+.cursor-reticle__corner {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: rgba(250, 249, 247, 0.85);
+  border-style: solid;
+  border-width: 0;
+  transition: border-color 0.25s ease, width 0.3s ease, height 0.3s ease, filter 0.25s ease;
 }
-.cursor-plane__wing {
-  fill: #faf9f7;
-  transition: fill 0.25s ease;
+.cursor-reticle__corner--tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
 }
-.cursor-plane__keel {
-  fill: #c9c5be;
-  transition: fill 0.25s ease;
+.cursor-reticle__corner--tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
 }
-.cursor-plane__tip {
-  fill: #8f8b85;
-  transition: fill 0.25s ease;
+.cursor-reticle__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
 }
-.cursor-plane__crease {
-  stroke: rgba(22, 22, 22, 0.35);
-  stroke-width: 0.8;
-  fill: none;
+.cursor-reticle__corner--br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
 }
-.cursor-plane--hover .cursor-plane__wing {
-  fill: theme('colors.accent.soft');
+.cursor-reticle--locked .cursor-reticle__corner {
+  width: 12px;
+  height: 12px;
+  border-color: theme('colors.accent.soft');
+  filter: drop-shadow(0 0 4px rgba(223, 37, 49, 0.7));
 }
-.cursor-plane--hover .cursor-plane__keel {
-  fill: theme('colors.accent.DEFAULT');
-}
-.cursor-plane--hover .cursor-plane__tip {
-  fill: theme('colors.accent.dim');
-}
-@keyframes plane-float {
+@keyframes reticle-breathe {
   0%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: scale(1);
   }
   50% {
-    transform: translateY(-2px) rotate(-4deg);
+    transform: scale(1.15);
   }
 }
 

@@ -3,82 +3,116 @@ import { gsap } from '@/lib/gsap'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 
-/** Angle (deg) the plane rests at: nose pointing up-left, like an arrow cursor. */
-const REST_ANGLE = -135
+const IDLE_SIZE = 30 // px — reticle size when free-floating
+const LOCK_PAD = 10 // px — breathing room around a locked-on element
+
+const INTERACTIVE =
+  'a, button, [role="button"], input, textarea, select, label, [data-cursor="hover"]'
 
 /**
- * Origami paper-plane cursor. The plane's nose is the hotspot. It glides after
- * the pointer with a little lag, banks to face the direction of travel, bobs
- * gently while idle, grows and turns accent-red over interactive elements, and
- * dips on click. Fine-pointer devices only; touch keeps the native cursor.
- * Under reduced motion it tracks 1:1 with a fixed heading and no idle float.
+ * HUD "target-lock" cursor. A crisp dot tracks the pointer 1:1; four corner
+ * brackets trail behind it and, over anything interactive, snap out to frame
+ * the element like a targeting lock (accent red). Clicking pulses the
+ * brackets inward. Fine-pointer devices only — touch keeps the native cursor.
+ * Under reduced motion everything moves instantly with no idle pulse.
  */
 export function Cursor() {
-  const planeRef = useRef<HTMLDivElement>(null)
-  const bodyRef = useRef<HTMLDivElement>(null)
+  const dotRef = useRef<HTMLDivElement>(null)
+  const reticleRef = useRef<HTMLDivElement>(null)
   const isFinePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
   const reduced = useReducedMotion()
 
   useEffect(() => {
     if (!isFinePointer) return
-    const plane = planeRef.current
-    const body = bodyRef.current
-    if (!plane || !body) return
+    const dot = dotRef.current
+    const reticle = reticleRef.current
+    if (!dot || !reticle) return
 
     document.body.classList.add('has-custom-cursor')
-    gsap.set(plane, { x: -100, y: -100, rotation: REST_ANGLE })
+    gsap.set([dot, reticle], { xPercent: -50, yPercent: -50, x: -100, y: -100 })
+    gsap.set(reticle, { width: IDLE_SIZE, height: IDLE_SIZE })
 
-    const moveX = gsap.quickTo(plane, 'x', { duration: reduced ? 0 : 0.18, ease: 'power3.out' })
-    const moveY = gsap.quickTo(plane, 'y', { duration: reduced ? 0 : 0.18, ease: 'power3.out' })
-    const turn = gsap.quickTo(plane, 'rotation', { duration: 0.45, ease: 'power3.out' })
+    const d = reduced ? 0 : 0.45
+    const rx = gsap.quickTo(reticle, 'x', { duration: d, ease: 'expo.out' })
+    const ry = gsap.quickTo(reticle, 'y', { duration: d, ease: 'expo.out' })
+    const rw = gsap.quickTo(reticle, 'width', { duration: d, ease: 'expo.out' })
+    const rh = gsap.quickTo(reticle, 'height', { duration: d, ease: 'expo.out' })
 
-    let lastX = 0
-    let lastY = 0
-    let angle = REST_ANGLE // unwrapped, so the plane always turns the short way
+    let target: HTMLElement | null = null
     let shown = false
 
+    /** Frame the locked element, or float a small reticle at the pointer. */
+    const aim = (px: number, py: number) => {
+      if (target && target.isConnected) {
+        const r = target.getBoundingClientRect()
+        rx(r.left + r.width / 2)
+        ry(r.top + r.height / 2)
+        rw(r.width + LOCK_PAD * 2)
+        rh(r.height + LOCK_PAD * 2)
+      } else {
+        rx(px)
+        ry(py)
+        rw(IDLE_SIZE)
+        rh(IDLE_SIZE)
+      }
+    }
+
+    let lastX = -100
+    let lastY = -100
+
     const onMove = (e: PointerEvent) => {
+      lastX = e.clientX
+      lastY = e.clientY
+      gsap.set(dot, { x: lastX, y: lastY })
       if (!shown) {
-        gsap.set(plane, { x: e.clientX, y: e.clientY })
-        plane.classList.add('cursor-plane--visible')
+        gsap.set(reticle, { x: lastX, y: lastY })
+        dot.classList.add('cursor--visible')
+        reticle.classList.add('cursor--visible')
         shown = true
       }
-      moveX(e.clientX)
-      moveY(e.clientY)
-
-      if (!reduced) {
-        const dx = e.clientX - lastX
-        const dy = e.clientY - lastY
-        // Only re-aim on deliberate movement, so jitter doesn't spin the plane.
-        if (dx * dx + dy * dy > 36) {
-          const target = (Math.atan2(dy, dx) * 180) / Math.PI
-          // Shortest signed difference, in [-180, 180).
-          const delta = ((((target - angle + 180) % 360) + 360) % 360) - 180
-          angle += delta * 0.6
-          turn(angle)
-          lastX = e.clientX
-          lastY = e.clientY
-        }
-      }
+      aim(lastX, lastY)
     }
 
-    const interactiveSelector = 'a, button, [role="button"], input, textarea, select, label, [data-cursor="hover"]'
     const onOver = (e: PointerEvent) => {
-      if ((e.target as HTMLElement).closest(interactiveSelector)) body.classList.add('cursor-plane--hover')
+      const el = (e.target as HTMLElement).closest<HTMLElement>(INTERACTIVE)
+      if (!el || el === target) return
+      // Don't frame huge targets (e.g. whole cards) — it reads as noise.
+      const r = el.getBoundingClientRect()
+      if (r.width > 520 || r.height > 320) return
+      target = el
+      reticle.classList.add('cursor-reticle--locked')
+      dot.classList.add('cursor-dot--locked')
+      aim(lastX, lastY)
     }
     const onOut = (e: PointerEvent) => {
-      if ((e.target as HTMLElement).closest(interactiveSelector)) body.classList.remove('cursor-plane--hover')
+      if (!target) return
+      const next = e.relatedTarget as Node | null
+      if (next && target.contains(next)) return
+      target = null
+      reticle.classList.remove('cursor-reticle--locked')
+      dot.classList.remove('cursor-dot--locked')
+      aim(lastX, lastY)
     }
-    const onDown = () => body.classList.add('cursor-plane--down')
-    const onUp = () => body.classList.remove('cursor-plane--down')
-    const onLeave = () => plane.classList.remove('cursor-plane--visible')
-    const onEnter = () => shown && plane.classList.add('cursor-plane--visible')
+
+    const onDown = () => reticle.classList.add('cursor-reticle--down')
+    const onUp = () => reticle.classList.remove('cursor-reticle--down')
+    const onScroll = () => target && aim(lastX, lastY)
+    const onLeave = () => {
+      dot.classList.remove('cursor--visible')
+      reticle.classList.remove('cursor--visible')
+    }
+    const onEnter = () => {
+      if (!shown) return
+      dot.classList.add('cursor--visible')
+      reticle.classList.add('cursor--visible')
+    }
 
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerover', onOver, { passive: true })
     window.addEventListener('pointerout', onOut, { passive: true })
     window.addEventListener('pointerdown', onDown, { passive: true })
     window.addEventListener('pointerup', onUp, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
     document.documentElement.addEventListener('pointerleave', onLeave)
     document.documentElement.addEventListener('pointerenter', onEnter)
 
@@ -89,6 +123,7 @@ export function Cursor() {
       window.removeEventListener('pointerout', onOut)
       window.removeEventListener('pointerdown', onDown)
       window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('scroll', onScroll)
       document.documentElement.removeEventListener('pointerleave', onLeave)
       document.documentElement.removeEventListener('pointerenter', onEnter)
     }
@@ -97,27 +132,16 @@ export function Cursor() {
   if (!isFinePointer) return null
 
   return (
-    // Outer: positioned + rotated by GSAP, origin at the nose (the hotspot).
-    <div ref={planeRef} className="cursor-plane" aria-hidden="true">
-      {/* Inner: hover / press scaling and the idle float (CSS). */}
-      <div ref={bodyRef} className="cursor-plane__body">
-        {/* Drawn nose-right; the nose sits at (30, 12) in the viewBox. */}
-        <svg
-          width="30"
-          height="24"
-          viewBox="0 0 30 24"
-          className={reduced ? 'cursor-plane__svg' : 'cursor-plane__svg cursor-plane__svg--float'}
-        >
-          {/* upper wing */}
-          <path d="M0 3 L30 12 L11 13 Z" className="cursor-plane__wing" />
-          {/* keel fold */}
-          <path d="M11 13 L30 12 L15 23 Z" className="cursor-plane__keel" />
-          {/* lower wing tip */}
-          <path d="M11 13 L15 23 L12.5 16.5 Z" className="cursor-plane__tip" />
-          {/* centre crease */}
-          <path d="M3 4 L30 12" className="cursor-plane__crease" />
-        </svg>
+    <>
+      <div ref={reticleRef} className="cursor-reticle" aria-hidden="true">
+        <div className={reduced ? 'cursor-reticle__frame' : 'cursor-reticle__frame cursor-reticle__frame--pulse'}>
+          <span className="cursor-reticle__corner cursor-reticle__corner--tl" />
+          <span className="cursor-reticle__corner cursor-reticle__corner--tr" />
+          <span className="cursor-reticle__corner cursor-reticle__corner--bl" />
+          <span className="cursor-reticle__corner cursor-reticle__corner--br" />
+        </div>
       </div>
-    </div>
+      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
+    </>
   )
 }
