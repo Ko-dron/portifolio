@@ -1,12 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowDown, Github, Linkedin, Mail } from 'lucide-react'
+import { ArrowDown, FileDown, Github, Linkedin, Mail } from 'lucide-react'
 import { profile, socials, whatsappUrl } from '@/data/content'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 import { HeroFallback } from '@/components/three/HeroFallback'
 import { useSmoothScroll } from '@/components/layout/ScrollProvider'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { useCan3D } from '@/hooks/useCan3D'
+import { cvUrl } from '@/data/content'
 
 // Lazy-load the entire 3D bundle so it never blocks first paint.
 const HeroScene = lazy(() => import('@/components/three/HeroScene'))
@@ -16,6 +18,7 @@ const ease = [0.16, 1, 0.3, 1] as const
 export function Hero() {
   const { scrollTo } = useSmoothScroll()
   const reduced = useReducedMotion()
+  const can3D = useCan3D()
 
   // Stagger the intro lines. Starts slightly after the loader lifts.
   const container = {
@@ -35,9 +38,13 @@ export function Hero() {
     >
       {/* 3D centerpiece */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <Suspense fallback={<HeroFallback />}>
-          <HeroScene />
-        </Suspense>
+        {can3D ? (
+          <Suspense fallback={<HeroFallback />}>
+            <HeroScene />
+          </Suspense>
+        ) : (
+          <HeroFallback />
+        )}
       </div>
 
       {/* Legibility scrim: darkens the left (text) side, fades to reveal the
@@ -50,6 +57,13 @@ export function Hero() {
       {/* Content overlay */}
       <div className="container-x relative z-10 py-28">
         <motion.div variants={container} initial="hidden" animate="show" className="max-w-4xl">
+          <motion.p
+            variants={item}
+            className="mb-6 font-mono text-xs uppercase tracking-[0.25em] text-accent"
+          >
+            {profile.name} · {profile.role}
+          </motion.p>
+
           <motion.h1
             variants={item}
             className="text-display-lg font-semibold text-heading"
@@ -61,7 +75,7 @@ export function Hero() {
             variants={item}
             className="mt-8 max-w-xl text-lg leading-relaxed text-body"
           >
-            {profile.bio}
+            {profile.heroIntro}
           </motion.p>
 
           <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-4">
@@ -74,11 +88,9 @@ export function Hero() {
             >
               View Projects
             </MagneticButton>
-            <MagneticButton
-              href={`mailto:${socials.email}`}
-              variant="ghost"
-            >
-              Get in touch
+            <MagneticButton href={cvUrl} variant="ghost" download>
+              <FileDown size={16} aria-hidden="true" />
+              Download CV
             </MagneticButton>
 
             <div className="ml-1 flex items-center gap-4 pl-4">

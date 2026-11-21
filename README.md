@@ -1,15 +1,15 @@
 # Stanley Ansong — Immersive Portfolio
 
-> A production-ready, single-page personal portfolio for **Stanley Ansong** — full-stack developer with genuine depth in **cybersecurity** and **AI**. Immersive but calm: a real 3D hero, buttery momentum scrolling, and a pinned horizontal Projects showcase, all in a sleek, minimal dark theme.
+> Personal portfolio for **Stanley Ansong**: **cybersecurity** is the core, **AI** is the specialty, and web, cloud and networking are supporting skills.
 
-<!-- LIVE DEMO: add your deployed URL here once published, e.g. https://stanleyansong.dev -->
+**Live:** https://portifolio-theta-wheat-80.vercel.app
 <!-- SCREENSHOT: drop a screenshot into src/assets/ and embed it here, e.g. ![Portfolio](src/assets/screenshot.png) -->
 
 ---
 
 ## Overview
 
-This is a personal portfolio website that positions Stanley as a versatile **all-rounder** — weighting full-stack development, cybersecurity, and AI evenly across the content. It's a single scrolling page with an editorial, premium feel inspired by the restraint of Linear / Vercel / Apple product pages, with a creative-developer edge.
+The site leads with security and AI work (CodeAlpha sniffer, Suricata NIDS, phishing-awareness training, Evexia from NASA Space Apps 2026), then shows web builds as supporting proof of shipping, followed by experience (CodeAlpha internship, CSS KNUST Audit Committee), skills, certifications and contact.
 
 The site is built to impress **without** clutter: every animation is intentional, smooth, and restrained.
 
@@ -125,6 +125,15 @@ npm run preview
 **Portrait & OG image:** the About portrait is `src/assets/profile-pic.jpg`, imported and rendered by `About.tsx` — to change it, replace that file (or point the import at a new one) and update the `width`/`height` attributes to the new image's intrinsic size. The social card `public/og-image.png` is a generated placeholder; regenerate with `node scripts/generate-og.mjs` or drop in your own 1200×630 image.
 
 ---
+
+## Content & maintenance
+
+- **All copy lives in `src/data/content.ts`.** Projects with `draft: true` are kept but not shown; fill in summary/stack/links and delete the flag to publish.
+- **Project screenshots:** `npm run screenshots` recaptures them from the live sites into `src/assets/projects/`.
+- **CV + social card:** edit `cv/cv.html` / `cv/og.html`, then `npm run cv` to regenerate `public/Stanley-Ansong-CV.pdf` and `public/og-image.png`.
+- **Contact form:** set `VITE_WEB3FORMS_KEY` (free key from web3forms.com) in `.env.local` and in Vercel's environment variables. Without it, the form falls back to `mailto:`.
+- **Custom domain:** after connecting it in Vercel, replace the vercel.app URL in `index.html`, `public/sitemap.xml`, `public/robots.txt` and `siteUrl` in `src/data/content.ts`.
+- **Mobile performance:** the WebGL hero only loads on non-touch / wider screens without reduced-motion or Data Saver; everyone else gets a static CSS fallback and never downloads three.js.
 
 ## Deployment
 

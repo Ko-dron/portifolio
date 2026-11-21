@@ -1,9 +1,9 @@
 import { useLayoutEffect, useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { gsap, ScrollTrigger } from '@/lib/gsap'
-import { projects, sections } from '@/data/content'
+import { publishedFeatured as projects, publishedSupporting, sections } from '@/data/content'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { Reveal, RevealGroup, RevealItem } from '@/components/ui/Reveal'
+import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 import { ProjectCard } from './ProjectCard'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -20,8 +20,35 @@ export function Projects() {
   const horizontal = isDesktop && !reduced
 
   return (
-    <section id="projects" className="scroll-mt-24">
-      {horizontal ? <ProjectsHorizontal /> : <ProjectsStacked />}
+    <>
+      <section id="projects" className="scroll-mt-24" aria-label="Featured security and AI work">
+        {horizontal ? <ProjectsHorizontal /> : <ProjectsStacked />}
+      </section>
+      <SupportingWork />
+    </>
+  )
+}
+
+/* ── Supporting web builds ─────────────────────────────────────────────── */
+
+function SupportingWork() {
+  const { supporting: copy } = sections
+  if (publishedSupporting.length === 0) return null
+  return (
+    <section id="web" className="container-x scroll-mt-24 pb-section pt-16 lg:pt-section" aria-labelledby="web-title">
+      <header className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <h2 id="web-title" className="text-2xl font-semibold text-heading md:text-3xl">
+          {copy.title}
+        </h2>
+        <p className="max-w-md text-sm text-body md:text-right">{copy.lead}</p>
+      </header>
+      <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" stagger={0.06}>
+        {publishedSupporting.map((project) => (
+          <RevealItem key={project.title}>
+            <ProjectCard project={project} variant="compact" />
+          </RevealItem>
+        ))}
+      </RevealGroup>
     </section>
   )
 }
@@ -82,7 +109,7 @@ function ProjectsHorizontal() {
         </div>
 
         {projects.map((project) => (
-          <ProjectCard key={project.repo} project={project} variant="horizontal" />
+          <ProjectCard key={project.title} project={project} variant="horizontal" />
         ))}
 
         {/* Tail spacer so the last card clears the edge */}
@@ -97,18 +124,15 @@ function ProjectsHorizontal() {
 function ProjectsStacked() {
   const { projects: copy } = sections
   return (
-    <div className="container-x py-section">
+    <div className="container-x pt-section">
       <SectionHeading title={copy.title} lead={copy.lead} />
       <RevealGroup className="grid gap-6 sm:grid-cols-2" stagger={0.08}>
         {projects.map((project) => (
-          <RevealItem key={project.repo}>
+          <RevealItem key={project.title}>
             <ProjectCard project={project} variant="stacked" />
           </RevealItem>
         ))}
       </RevealGroup>
-      <Reveal>
-        <div className="hairline mt-12" />
-      </Reveal>
     </div>
   )
 }

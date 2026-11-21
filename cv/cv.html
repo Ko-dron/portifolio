@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Stanley Ansong — CV</title>
+<!-- Source for public/Stanley-Ansong-CV.pdf. Edit, then run `npm run cv`. -->
+<style>
+  @page { size: A4; margin: 12mm 15mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 9.6pt/1.42 "Segoe UI", Inter, Arial, sans-serif; color: #1d1d1f; }
+  a { color: inherit; text-decoration: none; }
+  header { border-bottom: 2px solid #c8202b; padding-bottom: 8px; margin-bottom: 10px; }
+  h1 { margin: 0; font-size: 22pt; letter-spacing: -0.02em; }
+  .role { margin: 2px 0 6px; font-size: 11pt; color: #c8202b; font-weight: 600; }
+  .contact { font-size: 8.8pt; color: #444; }
+  .contact span + span::before { content: "·"; margin: 0 6px; color: #aaa; }
+  h2 { margin: 10px 0 4px; font-size: 9pt; letter-spacing: 0.14em; text-transform: uppercase; color: #c8202b; }
+  p { margin: 0 0 4px; }
+  .item { margin-bottom: 7px; break-inside: avoid; }
+  .row { display: flex; justify-content: space-between; gap: 12px; }
+  .row b { font-size: 10pt; }
+  .muted { color: #555; font-size: 8.8pt; white-space: nowrap; }
+  .sub { color: #444; font-size: 9pt; }
+  ul { margin: 2px 0 0; padding-left: 15px; }
+  li { margin: 1px 0; }
+  .skills { display: grid; grid-template-columns: 110px 1fr; gap: 2px 10px; }
+  .skills b { font-size: 9.2pt; }
+  .certs li { display: flex; justify-content: space-between; gap: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Stanley Ansong</h1>
+  <p class="role">Cybersecurity &amp; AI · BSc Information Technology, KNUST</p>
+  <p class="contact">
+    <span>Kumasi, Ghana</span>
+    <span><a href="mailto:ansongsrx@gmail.com">ansongsrx@gmail.com</a></span>
+    <span><a href="https://www.linkedin.com/in/stanley-ansong-32a9a3398/">linkedin.com/in/stanley-ansong-32a9a3398</a></span>
+    <span><a href="https://github.com/Ko-dron">github.com/Ko-dron</a></span>
+    <span><a href="https://portifolio-theta-wheat-80.vercel.app">Portfolio</a></span>
+  </p>
+</header>
+
+<h2>Profile</h2>
+<p>Cybersecurity-focused IT student with a specialty in AI. Hands-on with packet analysis, intrusion detection and security awareness from a CodeAlpha internship, and with applied AI from building an astronaut health console at NASA Space Apps 2026. Uses web, cloud and networking skills to ship working tools.</p>
+
+<h2>Education</h2>
+<div class="item">
+  <div class="row"><b>BSc Information Technology — Kwame Nkrumah University of Science and Technology</b><span class="muted">Jan 2026 – Sep 2029</span></div>
+</div>
+
+<h2>Experience</h2>
+<div class="item">
+  <div class="row"><b>Cybersecurity Intern — CodeAlpha (Remote)</b><span class="muted">2026</span></div>
+  <ul>
+    <li>Built a Python/Scapy packet sniffer that decodes TCP, UDP, ICMP, DNS and QUIC traffic and reports top talkers.</li>
+    <li>Wrote six custom Suricata rules detecting port scans, ping sweeps, SSH brute force, HTTP scanners, suspicious DNS and oversized ICMP.</li>
+    <li>Designed a 12-slide phishing-awareness training module for non-technical users.</li>
+  </ul>
+</div>
+<div class="item">
+  <div class="row"><b>Head of Audit Committee — Computer Science Society, KNUST</b><span class="muted">Oct 2026 – Present</span></div>
+  <ul>
+    <li>Lead the committee reviewing the society’s finances and records; coordinate the team and report findings to the executive.</li>
+  </ul>
+</div>
+
+<h2>Projects</h2>
+<div class="item">
+  <div class="row"><b>Evexia — Crew Health Console</b><span class="muted">NASA Space Apps 2026, Kumasi</span></div>
+  <p class="sub">React · Vite · Recharts · PWA — evexia-nasa-space-app-2026.vercel.app</p>
+  <ul>
+    <li>Seven vital readings rolled into one health score judged against spaceflight-adjusted ranges; 3D body map; mission-history charts and live wearable telemetry.</li>
+    <li>Offline self-care guidance, an “Earth link” that holds reports through comms blackouts, and a flight-surgeon view of the whole crew.</li>
+  </ul>
+</div>
+<div class="item">
+  <div class="row"><b>Network Intrusion Detection System</b><span class="muted">Suricata · Linux</span></div>
+  <p>Custom Suricata NIDS with six hand-written detection rules. github.com/Ko-dron/CodeAlpha_NetworkIDS</p>
+</div>
+<div class="item">
+  <div class="row"><b>Basic Network Sniffer</b><span class="muted">Python · Scapy · Kali</span></div>
+  <p>Live capture, protocol identification, DNS decoding and summary reporting. github.com/Ko-dron/CodeAlpha_BasicNetworkSniffer</p>
+</div>
+<div class="item">
+  <div class="row"><b>Web builds</b><span class="muted">Next.js · React · TypeScript · Three.js</span></div>
+  <p>Ridon (ride-hailing &amp; delivery web app) and Therion Garage (3D car showcase), both deployed on Vercel.</p>
+</div>
+
+<h2>Skills</h2>
+<div class="skills">
+  <b>Security</b><span>Network security, packet analysis, intrusion detection (Suricata), cyber risk management, phishing &amp; social-engineering defense, fraud prevention, Linux, SQL</span>
+  <b>AI</b><span>Prompt engineering, AI-assisted development, applied AI for health monitoring, LLM tooling (Claude)</span>
+  <b>Web · Cloud · Net</b><span>React, TypeScript, Python, REST APIs, Vercel, TCP/IP fundamentals</span>
+</div>
+
+<h2>Certifications</h2>
+<ul class="certs">
+  <li><span>Google Cybersecurity: Foundations of Cybersecurity; Play It Safe; Connect and Protect: Networks and Network Security</span><span class="muted">Jul 2026</span></li>
+  <li><span>Google Cybersecurity: Tools of the Trade: Linux and SQL</span><span class="muted">Aug 2026</span></li>
+  <li><span>Google Cybersecurity: Assets, Threats, and Vulnerabilities</span><span class="muted">Oct 2026</span></li>
+  <li><span>Certified Online Fraud Prevention Specialist (COFPS) — Hack &amp; Fix</span><span class="muted">Aug 2026</span></li>
+  <li><span>Claude 101 — Anthropic</span><span class="muted">May 2026</span></li>
+</ul>
+
+</body>
+</html>

@@ -5,38 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#161616" />
 
+    <!--
+      SITE URL: currently the Vercel deployment. When the custom domain is
+      connected, replace every https://portifolio-theta-wheat-80.vercel.app below
+      and in public/sitemap.xml, public/robots.txt and src/data/content.ts.
+    -->
+
     <!-- Primary meta -->
-    <title>Stanley Ansong — Full-Stack Developer · Cybersecurity & AI</title>
+    <title>Stanley Ansong — Cybersecurity &amp; AI | IT Student, KNUST</title>
     <meta
       name="description"
-      content="Stanley Ansong is a full-stack developer with depth in cybersecurity and AI. IT student at KNUST building practical, real-world tech across the stack, security, and AI."
+      content="Stanley Ansong is a cybersecurity-focused IT student at KNUST specialising in AI. Projects include a Suricata intrusion detection system, a Python network sniffer, phishing-awareness training and Evexia, an astronaut health console built at NASA Space Apps 2026."
     />
     <meta name="author" content="Stanley Ansong" />
-    <link rel="canonical" href="https://stanleyansong.dev/" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://portifolio-theta-wheat-80.vercel.app/" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Stanley Ansong — Full-Stack Developer · Cybersecurity & AI" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Stanley Ansong" />
+    <meta property="og:title" content="Stanley Ansong — Cybersecurity & AI" />
     <meta
       property="og:description"
-      content="Building practical, real-world tech — across the full stack, security, and AI."
+      content="Securing systems, and building AI that holds up under pressure. Security and AI projects, CodeAlpha internship, NASA Space Apps 2026."
     />
-    <meta property="og:url" content="https://stanleyansong.dev/" />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://portifolio-theta-wheat-80.vercel.app/" />
+    <meta property="og:image" content="https://portifolio-theta-wheat-80.vercel.app/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Stanley Ansong — Cybersecurity & AI" />
+    <meta property="og:locale" content="en_GB" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Stanley Ansong — Full-Stack Developer · Cybersecurity & AI" />
+    <meta name="twitter:title" content="Stanley Ansong — Cybersecurity & AI" />
     <meta
       name="twitter:description"
-      content="Building practical, real-world tech — across the full stack, security, and AI."
+      content="Securing systems, and building AI that holds up under pressure."
     />
-    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:image" content="https://portifolio-theta-wheat-80.vercel.app/og-image.png" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Stanley Ansong",
+        "jobTitle": "Cybersecurity & AI — IT Student",
+        "url": "https://portifolio-theta-wheat-80.vercel.app/",
+        "image": "https://portifolio-theta-wheat-80.vercel.app/og-image.png",
+        "address": { "@type": "PostalAddress", "addressLocality": "Kumasi", "addressCountry": "GH" },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Kwame Nkrumah University of Science and Technology"
+        },
+        "knowsAbout": [
+          "Cybersecurity",
+          "Network security",
+          "Intrusion detection",
+          "Artificial intelligence",
+          "Prompt engineering",
+          "Web development"
+        ],
+        "sameAs": ["https://github.com/Ko-dron", "https://www.linkedin.com/in/stanley-ansong-32a9a3398/"]
+      }
+    </script>
 
     <!-- Fonts: Space Grotesk (display) + Inter (body) + Space Mono (indices) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -48,6 +84,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Stanley Ansong — Cybersecurity &amp; AI</h1>
+      <p>
+        Cybersecurity-focused IT student at KNUST. Email
+        <a href="mailto:ansongsrx@gmail.com">ansongsrx@gmail.com</a> ·
+        <a href="https://github.com/Ko-dron">GitHub</a> ·
+        <a href="/Stanley-Ansong-CV.pdf">CV (PDF)</a>
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

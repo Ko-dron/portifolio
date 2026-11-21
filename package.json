@@ -3,13 +3,15 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Immersive dark-minimal portfolio for Stanley Ansong — full-stack, cybersecurity & AI.",
+  "description": "Portfolio of Stanley Ansong — cybersecurity and AI.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist",
+    "cv": "node scripts/render-cv.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.3",
@@ -33,6 +35,7 @@
     "autoprefixer": "^10.4.20",
     "gh-pages": "^6.2.0",
     "postcss": "^8.4.49",
+    "puppeteer-core": "^23.11.1",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"

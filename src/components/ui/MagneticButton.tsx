@@ -16,11 +16,13 @@ interface LinkProps extends BaseProps {
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
   target?: string
   rel?: string
+  download?: boolean | string
 }
 
 interface ButtonProps extends BaseProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit'
+  disabled?: boolean
 }
 
 const variantClasses: Record<Variant, string> = {
@@ -57,6 +59,7 @@ export function MagneticButton(props: LinkProps | ButtonProps) {
         onClick={props.onClick}
         target={props.target}
         rel={props.rel}
+        download={props.download}
         className={classes}
         data-cursor="hover"
       >
@@ -70,6 +73,7 @@ export function MagneticButton(props: LinkProps | ButtonProps) {
       ref={ref}
       type={props.type ?? 'button'}
       onClick={props.onClick}
+      disabled={props.disabled}
       className={classes}
       data-cursor="hover"
     >

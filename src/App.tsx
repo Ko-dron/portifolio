@@ -9,6 +9,7 @@ import { About } from '@/components/sections/About'
 import { Skills } from '@/components/sections/Skills'
 import { Projects } from '@/components/sections/Projects'
 import { Certifications } from '@/components/sections/Certifications'
+import { Experience } from '@/components/sections/Experience'
 import { Contact } from '@/components/sections/Contact'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { ScrollTrigger } from '@/lib/gsap'
@@ -56,8 +57,9 @@ function Site() {
       <main id="main">
         <Hero />
         <About />
-        <Skills />
         <Projects />
+        <Experience />
+        <Skills />
         <Certifications />
         <Contact />
       </main>

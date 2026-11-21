@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useProgress } from '@react-three/drei'
 import { profile } from '@/data/content'
 
 interface LoaderProps {
@@ -9,24 +8,17 @@ interface LoaderProps {
 }
 
 /**
- * Minimal intro loader. Eases a counter toward the real drei/three loading
- * progress (or straight to 100 when the procedural scene has nothing async to
- * load), holds for a short minimum so the reveal never flashes, and always
- * resolves via a safety timeout so it can never hang the page.
+ * Minimal intro loader. Eases a counter to 100, holds for a short minimum so
+ * the reveal never flashes, then lifts. It deliberately does not import drei /
+ * three: doing so would pull the whole 3D bundle onto phones that never render
+ * the scene (the 3D hero is procedural, so there is no asset progress to track).
  */
 export function Loader({ onComplete }: LoaderProps) {
-  const { progress, active } = useProgress()
   const [display, setDisplay] = useState(0)
   const [done, setDone] = useState(false)
 
-  // Refs so the single rAF loop always reads the latest values without
-  // restarting on every progress change.
   const startRef = useRef<number>(performance.now())
   const displayRef = useRef(0)
-  const progressRef = useRef(0)
-  const activeRef = useRef(false)
-  progressRef.current = progress
-  activeRef.current = active
 
   useEffect(() => {
     let raf = 0
@@ -34,14 +26,13 @@ export function Loader({ onComplete }: LoaderProps) {
     const MAX_DURATION = 5000 // ms — hard cap so we never hang on a stalled load
 
     const tick = () => {
-      // While assets are loading, chase the real value; otherwise ease to 100.
-      const target = activeRef.current ? progressRef.current : 100
+      const target = 100
       displayRef.current += (target - displayRef.current) * 0.08
       if (displayRef.current > 99.5) displayRef.current = 100
       setDisplay(displayRef.current)
 
       const elapsed = performance.now() - startRef.current
-      const reachedEnd = displayRef.current >= 99.5 && !activeRef.current
+      const reachedEnd = displayRef.current >= 99.5
       const timedOut = elapsed > MAX_DURATION
 
       if ((reachedEnd && elapsed > MIN_DURATION) || timedOut) {

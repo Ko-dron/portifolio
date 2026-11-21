@@ -1,30 +1,61 @@
 import { useState } from 'react'
-import { ArrowUpRight, Github, Linkedin, Mail, Phone } from 'lucide-react'
-import { sections, socials, whatsappUrl } from '@/data/content'
+import { ArrowUpRight, FileDown, Github, Linkedin, Mail, Phone } from 'lucide-react'
+import { cvUrl, sections, socials, whatsappUrl } from '@/data/content'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Reveal } from '@/components/ui/Reveal'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 /**
- * Contact section. The form is intentionally backend-free: it composes a
- * `mailto:` link from the fields and hands off to the user's mail client, so it
- * works on a static host with zero configuration.
- *
- * To use a real submission service instead (Formspree / Web3Forms), replace the
- * `handleSubmit` body with a `fetch` to the provider endpoint and add your key.
+ * Contact section. The form posts to Web3Forms (free, no server to run) when
+ * `VITE_WEB3FORMS_KEY` is set — get a key at https://web3forms.com and add it
+ * to `.env.local` locally and to the host's environment variables (Vercel →
+ * Settings → Environment Variables). Without a key it falls back to opening
+ * the visitor's mail app via `mailto:`.
  */
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined
+
+type Status = 'idle' | 'sending' | 'sent' | 'error'
+
 export function Contact() {
   const { contact } = sections
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', message: '', botcheck: '' })
+  const [status, setStatus] = useState<Status>('idle')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Portfolio enquiry from ${form.name || 'someone'}`)
-    const body = encodeURIComponent(
-      `${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ''}`,
-    )
-    window.location.href = `mailto:${socials.email}?subject=${subject}&body=${body}`
+
+    if (!WEB3FORMS_KEY) {
+      const subject = encodeURIComponent(`Portfolio enquiry from ${form.name || 'someone'}`)
+      const body = encodeURIComponent(
+        `${form.message}\n\n— ${form.name}${form.email ? ` (${form.email})` : ''}`,
+      )
+      window.location.href = `mailto:${socials.email}?subject=${subject}&body=${body}`
+      return
+    }
+
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Portfolio enquiry from ${form.name}`,
+          from_name: 'Portfolio contact form',
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          botcheck: form.botcheck,
+        }),
+      })
+      const data = (await res.json()) as { success?: boolean }
+      if (!res.ok || !data.success) throw new Error('Submit failed')
+      setStatus('sent')
+      setForm({ name: '', email: '', message: '', botcheck: '' })
+    } catch {
+      setStatus('error')
+    }
   }
 
   const contactLinks = [
@@ -42,6 +73,7 @@ export function Contact() {
       href: whatsappUrl,
       icon: WhatsAppIcon,
     },
+    { label: 'CV', value: 'Download PDF', href: cvUrl, icon: FileDown },
     ...(socials.phonePublic
       ? [{ label: 'Phone', value: socials.phone, href: `tel:${socials.phone}`, icon: Phone }]
       : []),
@@ -56,7 +88,7 @@ export function Contact() {
         <div>
           <Reveal>
             <p className="text-balance text-3xl font-semibold leading-tight text-heading md:text-4xl">
-              Let&rsquo;s build something.
+              Let&rsquo;s work together.
             </p>
           </Reveal>
           <Reveal delay={0.05}>
@@ -155,16 +187,35 @@ export function Contact() {
               />
             </div>
 
+            {/* Honeypot: hidden from people, filled in by spam bots. */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+              checked={form.botcheck === 'on'}
+              onChange={(e) => setForm((f) => ({ ...f, botcheck: e.target.checked ? 'on' : '' }))}
+            />
+
             <button
               type="submit"
               data-cursor="hover"
-              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-heading px-6 py-3 text-sm font-medium text-base transition-colors duration-300 hover:bg-white"
+              disabled={status === 'sending'}
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-heading px-6 py-3 text-sm font-medium text-base transition-colors duration-300 hover:bg-white disabled:cursor-wait disabled:opacity-60"
             >
-              Send message
-              <ArrowUpRight size={16} />
+              {status === 'sending' ? 'Sending…' : 'Send message'}
+              <ArrowUpRight size={16} aria-hidden="true" />
             </button>
-            <p className="text-center text-xs text-muted">
-              Opens in your mail app — no data leaves your device.
+            <p className="text-center text-xs text-muted" role="status" aria-live="polite">
+              {status === 'sent'
+                ? 'Thanks — your message is on its way. I’ll reply by email.'
+                : status === 'error'
+                  ? `Something went wrong. Please email me directly at ${socials.email}.`
+                  : WEB3FORMS_KEY
+                    ? 'Your message goes straight to my inbox.'
+                    : 'Opens in your mail app.'}
             </p>
           </form>
         </Reveal>

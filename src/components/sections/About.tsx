@@ -42,8 +42,7 @@ export function About() {
         <div className="md:col-span-8">
           <Reveal>
             <p className="text-balance text-2xl leading-snug text-heading md:text-3xl">
-              A versatile all-rounder — building across the full stack, with genuine depth in
-              security and AI.
+              Cybersecurity is my core. AI is my specialty.
             </p>
           </Reveal>
 
@@ -53,10 +52,10 @@ export function About() {
 
           <Reveal delay={0.1}>
             <p className="mt-4 max-w-2xl leading-relaxed text-body">
-              I like work that spans the whole picture — designing an interface, wiring up the API
-              behind it, then thinking about how it holds up when someone tries to break it. That
-              range is the point: I aim to be the developer who can build it, secure it, and make it
-              smarter.
+              During my CodeAlpha cybersecurity internship I built a packet sniffer, wrote Suricata
+              intrusion-detection rules and designed phishing-awareness training. At NASA Space Apps
+              2026 I helped build Evexia, a health console for astronaut crews. I also lead the Audit
+              Committee of the Computer Science Society at KNUST.
             </p>
           </Reveal>
 
@@ -97,7 +96,7 @@ export function About() {
               </div>
               <p className="mt-3 font-medium text-heading">{profile.location}</p>
               <p className="mt-1 text-sm text-body">
-                Open to internships, collaborations & remote work.
+                Open to security and AI internships, on-site or remote.
               </p>
             </RevealItem>
           </RevealGroup>

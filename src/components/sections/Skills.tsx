@@ -9,7 +9,7 @@ export function Skills() {
     <section id="skills" className="container-x scroll-mt-24 py-section">
       <SectionHeading title={skills.title} lead={skills.lead} />
 
-      <RevealGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" stagger={0.06}>
+      <RevealGroup className="grid gap-4 md:grid-cols-3" stagger={0.06}>
         {skillGroups.map((group) => {
           const Icon = group.icon
           return (
@@ -24,7 +24,10 @@ export function Skills() {
                 <Icon size={20} strokeWidth={1.6} />
               </div>
 
-              <h3 className="text-lg font-semibold text-heading">{group.title}</h3>
+              <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-accent">
+                {group.label}
+              </span>
+              <h3 className="mt-1 text-lg font-semibold text-heading">{group.title}</h3>
 
               <ul className="mt-4 flex flex-col gap-2.5">
                 {group.skills.map((skill) => (
