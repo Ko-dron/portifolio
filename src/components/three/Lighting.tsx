@@ -14,6 +14,11 @@ export function Lighting() {
       <directionalLight position={[5, 9, 6]} intensity={2.2} color="#fff6f0" />
       {/* Neutral fill from the opposite side to lift shadows. */}
       <directionalLight position={[-6, 4, -3]} intensity={0.6} color="#9a97ff" />
+      {/* Rim / back light: a cool edge from behind and above the desk so the
+          silhouettes separate from the near-black background. */}
+      <directionalLight position={[-6, 1, -8]} intensity={1.2} color="#aab8ff" />
+      {/* Dim red kicker from behind-left for a moody edge on the props. */}
+      <directionalLight position={[-8, 0.8, 2]} intensity={0.7} color="#ff4d57" />
       {/* Red accent glow near the monitor. */}
       <pointLight position={[-1, 3, -2]} intensity={28} color="#df2531" distance={16} />
       {/* Subtle red underglow beneath the desk. */}

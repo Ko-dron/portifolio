@@ -26,7 +26,7 @@ function detectLowPower(): boolean {
  */
 /** Pixels per world unit for a given viewport. */
 function isoZoom(width: number, height: number) {
-  return clamp(Math.min(width, height * 1.5) / 11, 30, 105)
+  return clamp(Math.min(width, height * 1.4) / 11, 30, 105)
 }
 
 function IsoCameraRig() {
@@ -58,7 +58,7 @@ function DeskAnchor({ children }: { children: React.ReactNode }) {
   // Centre the desk at ~74-75% of the viewport width.
   const frac = size.width >= 1280 ? 0.24 : 0.25
   const k = (size.width * frac) / zoom / Math.SQRT2
-  return <group position={[0.4 + k, -0.35, 0.4 - k]}>{children}</group>
+  return <group position={[0.4 + k, 0.6, 0.4 - k]}>{children}</group>
 }
 
 /**

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
  * fallback, and the three.js bundle is never downloaded) when:
  *   • the user prefers reduced motion,
  *   • Data Saver is on,
- *   • it's a small touch screen (phones),
+ *   • the viewport is ≤768px wide (phones, narrow windows),
  *   • WebGL is unavailable.
  * Starts false so the first paint never waits on the 3D decision.
  */
@@ -14,7 +14,8 @@ export function useCan3D(): boolean {
 
   useEffect(() => {
     const reducedQ = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const phoneQ = window.matchMedia('(pointer: coarse) and (max-width: 767px)')
+    // ≤768px: the hero text spans the full width, so the desk would sit behind it.
+    const phoneQ = window.matchMedia('(max-width: 768px)')
 
     const evaluate = () => {
       const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
